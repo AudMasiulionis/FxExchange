@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FxExchange", "FxExchange\FxExchange.csproj", "{15F6FD3D-0368-4495-8011-A62D80358CCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FxExchange.CLI", "FxExchange\FxExchange.CLI.csproj", "{15F6FD3D-0368-4495-8011-A62D80358CCB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FxExchange.Domain", "FxExchange.Domain\FxExchange.Domain.csproj", "{D757355F-9A7E-4947-92DD-5FDC0D5158E6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FxExchange.Domain.Tests", "Fx.Exchange.Domain.Tests\FxExchange.Domain.Tests.csproj", "{86BD786E-9C84-4FB5-8D89-9F3000792048}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FxExchange.Infrastructure", "FxExchange.Infrastructure\FxExchange.Infrastructure.csproj", "{AAEF709B-875C-4CD4-ADCC-3E7782B46881}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FxExchange.CLI.Tests", "FxExchange.CLI.Tests\FxExchange.CLI.Tests.csproj", "{1AB9C42E-C582-4A4A-9386-910C9132E31F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +23,22 @@ Global
 		{15F6FD3D-0368-4495-8011-A62D80358CCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15F6FD3D-0368-4495-8011-A62D80358CCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15F6FD3D-0368-4495-8011-A62D80358CCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D757355F-9A7E-4947-92DD-5FDC0D5158E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D757355F-9A7E-4947-92DD-5FDC0D5158E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D757355F-9A7E-4947-92DD-5FDC0D5158E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D757355F-9A7E-4947-92DD-5FDC0D5158E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86BD786E-9C84-4FB5-8D89-9F3000792048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86BD786E-9C84-4FB5-8D89-9F3000792048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86BD786E-9C84-4FB5-8D89-9F3000792048}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86BD786E-9C84-4FB5-8D89-9F3000792048}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAEF709B-875C-4CD4-ADCC-3E7782B46881}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAEF709B-875C-4CD4-ADCC-3E7782B46881}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAEF709B-875C-4CD4-ADCC-3E7782B46881}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAEF709B-875C-4CD4-ADCC-3E7782B46881}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AB9C42E-C582-4A4A-9386-910C9132E31F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AB9C42E-C582-4A4A-9386-910C9132E31F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AB9C42E-C582-4A4A-9386-910C9132E31F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AB9C42E-C582-4A4A-9386-910C9132E31F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
