@@ -4,7 +4,6 @@ using FxExchange.Domain.Models;
 using Moq;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 
 namespace Fx.Exchange.Domain.Tests
 {
@@ -18,8 +17,20 @@ namespace Fx.Exchange.Domain.Tests
         public void SetUp()
         {
             this.mockRepository = new MockRepository(MockBehavior.Strict);
-            this.mockCurrencyPairRepository?.Reset();
             this.mockCurrencyPairRepository = mockRepository.Create<ICurrencyPairRepository>();
+        }
+
+        private Money TestData(string iso)
+        {
+            switch (iso)
+            {
+                case "XXX":
+                    return new Money(10, iso);
+                case "YYY":
+                    return new Money(5, iso);
+                default:
+                    return null;
+            }
         }
 
         [TearDown]
@@ -30,131 +41,56 @@ namespace Fx.Exchange.Domain.Tests
 
         private RateExchanger CreateRateExchanger()
         {
+            this.mockCurrencyPairRepository.Setup(x => x.GetByBaseCurrency(It.IsAny<string>()))
+                .Returns((string iso) => TestData(iso));
             return new RateExchanger(this.mockCurrencyPairRepository.Object);
         }
 
-        public static IEnumerable<TestCaseData> Exchage_WithFoundBaseCurrency_ShouldReturnCorrectResult_TestData()
-        {
-            yield return new TestCaseData("EUR", "DKK", 1.0m, new Money(7.4394m, "EUR"));
-            yield return new TestCaseData("EUR", "DKK", 2.0m, new Money(14.8788m, "EUR"));
-        }
-
         [Test]
-        [TestCaseSource(nameof(Exchage_WithFoundBaseCurrency_ShouldReturnCorrectResult_TestData))]
-        public void Exchage_WithFoundBaseCurrency_ShouldReturnCorrectResult(string iso1, string iso2, decimal amount, Money expected)
+        [TestCase("XXX", "YYY", 1.0, 2)]
+        [TestCase("XXX", "YYY", 2.0, 4)]
+        public void Exchage_WithFoundBaseCurrency_ShouldReturnCorrectResult(string baseCurrencyISO, string quoteCurrencyISO, decimal amount, decimal expected)
         {
-            this.mockCurrencyPairRepository.Setup(x => x.GetByBaseCurrency(It.IsAny<string>()))
-                .Returns(new CurrencyPair
-                {
-                    BaseCurrency = "EUR",
-                    BaseAmount = 100m,
-                    QuoteCurrency = "DKK",
-                    QuoteAmount = 743.94m
-                });
-
             var unitUnderTest = this.CreateRateExchanger();
-
             var result = unitUnderTest.Exchage(
-                iso1,
-                iso2,
+                baseCurrencyISO,
+                quoteCurrencyISO,
                 amount);
 
-            Assert.AreEqual(expected, result);
-        }
-
-        public static IEnumerable<TestCaseData> Exchage_WithFoundQuoteCurrency_ShouldReturnCorrectResult_TestData()
-        {
-            yield return new TestCaseData("DKK", "EUR", 1.0m, new Money(0.1344194424281528080221523241m, "DKK"));
+            Assert.AreEqual(expected, result.Amount);
         }
 
         [Test]
-        [TestCaseSource(nameof(Exchage_WithFoundQuoteCurrency_ShouldReturnCorrectResult_TestData))]
-        public void Exchage_WithFoundQuoteCurrency_ShouldReturnCorrectResult(string iso1, string iso2, decimal amount, Money expected)
+        [TestCase("XXX", "111")]
+        [TestCase("111", "XXX")]
+        public void Exchage_WithNotFoundCurrencies_ShouldThrowRateNotFoundException(string baseCurrencyISO, string quoteCurrencyISO)
         {
-            this.mockCurrencyPairRepository.Setup(x => x.GetByBaseCurrency(It.IsAny<string>())).Returns<Money>(null);
-            this.mockCurrencyPairRepository.Setup(x => x.GetByQuoteCurrency(It.IsAny<string>()))
-                .Returns(new CurrencyPair
-                {
-                    BaseCurrency = "EUR",
-                    BaseAmount = 100m,
-                    QuoteCurrency = "DKK",
-                    QuoteAmount = 743.94m
-                });
-
             var unitUnderTest = this.CreateRateExchanger();
-
-            var result = unitUnderTest.Exchage(
-                iso1,
-                iso2,
-                amount);
-
-            Assert.AreEqual(expected, result);
-        }
-
-        public static IEnumerable<TestCaseData> Exchage_WithNotMatchingBaseCurrencies_ShouldReturnCorrectResult_TestData()
-        {
-            yield return new TestCaseData("EUR", "USD", 1.0m, new Money(1.1218953114867819818732940236m, "EUR"));
-        }
-
-        [Test]
-        [TestCaseSource(nameof(Exchage_WithNotMatchingBaseCurrencies_ShouldReturnCorrectResult_TestData))]
-        public void Exchage_WithNotMatchingBaseCurrencies_ShouldReturnCorrectResult(string iso1, string iso2, decimal amount, Money expected)
-        {
-            this.mockCurrencyPairRepository.Setup(x => x.GetByBaseCurrency("EUR"))
-                .Returns(new CurrencyPair
-                {
-                    BaseCurrency = "EUR",
-                    BaseAmount = 100m,
-                    QuoteCurrency = "DKK",
-                    QuoteAmount = 743.94m
-                });
-
-            this.mockCurrencyPairRepository.Setup(x => x.GetByBaseCurrency("USD"))
-                .Returns(new CurrencyPair
-                {
-                    BaseCurrency = "USD",
-                    BaseAmount = 100m,
-                    QuoteCurrency = "DKK",
-                    QuoteAmount = 663.11m
-                });
-
-            var unitUnderTest = this.CreateRateExchanger();
-
-            var result = unitUnderTest.Exchage(
-                iso1,
-                iso2,
-                amount);
-
-            Assert.AreEqual(expected, result);
-        }
-
-        [Test]
-        public void Exchage_WithNotFoundCurrencies_ShouldThrowRateNotFoundException()
-        {
-            this.mockCurrencyPairRepository.Setup(x => x.GetByBaseCurrency(It.IsAny<string>())).Returns<Money>(null);
-            this.mockCurrencyPairRepository.Setup(x => x.GetByQuoteCurrency(It.IsAny<string>())).Returns<Money>(null);
-
-            var unitUnderTest = this.CreateRateExchanger();
-
             Action act = () => unitUnderTest.Exchage(
-                "XXX",
-                "DKK",
+                baseCurrencyISO,
+                quoteCurrencyISO,
                 1);
 
             Assert.Throws<RateNotFoundException>(new TestDelegate(act));
         }
 
         [Test]
-        public void Exchage_WithZeroAmount_ShouldReturnZero()
+        [TestCase("", "YYY", 1)]
+        [TestCase("YYY", "", 1)]
+        [TestCase("YYY", "YYY", 0)]
+        [TestCase("YYY", "YYY", -1)]
+        public void Exchage_W(string baseCurrencyISO, string quoteCurrencyISO, decimal amount)
         {
             var unitUnderTest = this.CreateRateExchanger();
+            this.mockCurrencyPairRepository.Reset();
 
-            var result = unitUnderTest.Exchage(
-                "",
-                "",
-                0);
+            Action act = () => unitUnderTest.Exchage(
+                baseCurrencyISO,
+                quoteCurrencyISO,
+                amount);
 
-            Assert.AreEqual(new Money(0, ""), result);
+            Assert.Throws<ArgumentException>(new TestDelegate(act));
         }
+
     }
 }

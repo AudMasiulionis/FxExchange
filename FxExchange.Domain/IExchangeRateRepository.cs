@@ -4,7 +4,6 @@ namespace FxExchange.Domain
 {
     public interface ICurrencyPairRepository
     {
-        CurrencyPair GetByBaseCurrency(string iso);
-        CurrencyPair GetByQuoteCurrency(string iso);
+        Money GetByBaseCurrency(string iso);
     }
 }

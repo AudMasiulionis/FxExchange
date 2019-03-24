@@ -7,67 +7,21 @@ namespace FxExchange.Infrastructure
 {
     public class HardCodedCurrencyPairRepository : ICurrencyPairRepository
     {
-        private static List<CurrencyPair> _rates = new List<CurrencyPair>
+        private static List<Money> _rates = new List<Money>
         {
-            new CurrencyPair
-            {
-                    BaseCurrency = "EUR",
-                    BaseAmount = 100m,
-                    QuoteCurrency = "DKK",
-                    QuoteAmount = 743.94m
-            },
-            new CurrencyPair
-            {
-                    BaseCurrency = "USD",
-                    BaseAmount = 100m,
-                    QuoteCurrency = "DKK",
-                    QuoteAmount = 663.11m
-            },
-            new CurrencyPair
-            {
-                    BaseCurrency = "GBP",
-                    BaseAmount = 100m,
-                    QuoteCurrency = "DKK",
-                    QuoteAmount = 852.85m
-            },
-            new CurrencyPair
-            {
-                    BaseCurrency = "SEK",
-                    BaseAmount = 100m,
-                    QuoteCurrency = "DKK",
-                    QuoteAmount = 76.10m
-            },
-            new CurrencyPair
-            {
-                    BaseCurrency = "NOK",
-                    BaseAmount = 100m,
-                    QuoteCurrency = "DKK",
-                    QuoteAmount = 78.40m
-            },
-            new CurrencyPair
-            {
-                    BaseCurrency = "CHF",
-                    BaseAmount = 100m,
-                    QuoteCurrency = "DKK",
-                    QuoteAmount = 683.58m
-            },
-            new CurrencyPair
-            {
-                    BaseCurrency = "JPY",
-                    BaseAmount = 100m,
-                    QuoteCurrency = "DKK",
-                    QuoteAmount = 5.9740m
-            }
+            new Money(743.94m,"EUR"),
+            new Money(663.11m, "USD"),
+            new Money(852.85m, "GBP"),
+            new Money(76.10m, "SEK"),
+            new Money(78.40m, "NOK"),
+            new Money(683.58m, "CHF"),
+            new Money(5.9740m, "JPY"),
+            new Money(100m, "DKK")
         };
 
-        public CurrencyPair GetByBaseCurrency(string iso)
+        public Money GetByBaseCurrency(string iso)
         {
-            return _rates.FirstOrDefault(r => r.BaseCurrency == iso);
-        }
-
-        public CurrencyPair GetByQuoteCurrency(string iso)
-        {
-            return _rates.FirstOrDefault(r => r.QuoteCurrency == iso);
+            return _rates.FirstOrDefault(r => r.Currency == iso);
         }
     }
 }
