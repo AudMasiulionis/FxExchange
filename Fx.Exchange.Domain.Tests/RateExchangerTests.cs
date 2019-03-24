@@ -79,7 +79,7 @@ namespace Fx.Exchange.Domain.Tests
         [TestCase("YYY", "", 1)]
         [TestCase("YYY", "YYY", 0)]
         [TestCase("YYY", "YYY", -1)]
-        public void Exchage_W(string baseCurrencyISO, string quoteCurrencyISO, decimal amount)
+        public void Exchage_WithIncorrectParameters_ShouldThrowArgumentException(string baseCurrencyISO, string quoteCurrencyISO, decimal amount)
         {
             var unitUnderTest = this.CreateRateExchanger();
             this.mockCurrencyPairRepository.Reset();

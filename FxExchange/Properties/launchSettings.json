@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FxExchange": {
+      "commandName": "Project",
+      "commandLineArgs": "USD/EUR 1,1"
+    }
+  }
+}
